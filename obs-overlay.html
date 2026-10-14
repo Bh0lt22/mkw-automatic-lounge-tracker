@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <link rel="shortcut icon" href="./favicon.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>MKW OBS Scores Overlay</title>
+        <style>
+                /* Background trasparente per OBS */
+                html, body {
+                        margin: 0;
+                        padding: 0;
+                        background: transparent;
+                        overflow: hidden;
+                        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+                        color: #fff;
+                        width: 100vw;
+                        height: 100vh;
+                }
+
+                /* Griglia che riempie tutta la pagina */
+                #overlay {
+                        width: 100%;
+                        height: 100%;
+                        display: grid;
+                        gap: 0;
+                        padding: 0;
+                        box-sizing: border-box;
+                }
+
+                /* Orientamento: normale (griglia 3x2/2x2/etc), orizzontale
+                   (1 riga con tutti i team), verticale (1 colonna con tutti i team). */
+                #overlay.orient-normal.cols-1 { grid-template-columns: 1fr; }
+                #overlay.orient-normal.cols-2 { grid-template-columns: 1fr 1fr; }
+                #overlay.orient-normal.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+                #overlay.orient-horizontal {
+                        grid-template-columns: repeat(var(--team-count, 6), 1fr);
+                        grid-template-rows: 1fr;
+                }
+                #overlay.orient-vertical {
+                        grid-template-columns: 1fr;
+                        grid-template-rows: repeat(var(--team-count, 6), 1fr);
+                }
+
+                /* Ogni rettangolo team */
+                .team-box {
+                        position: relative;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 12px;
+                        padding: 16px 24px;
+                        border-radius: 0;
+                        background: linear-gradient(135deg, rgba(20,20,30,0.85), rgba(10,10,15,0.85));
+                        border: 2px solid #fff2;
+                        box-shadow: none;
+                        transition: transform .3s ease, border-color .3s ease;
+                }
+
+                .team-box.rank-1 {
+                        border-color: #f5c542;
+                        box-shadow: 0 0 24px rgba(245, 197, 66, 0.4), 0 4px 16px rgba(0,0,0,0.5);
+                }
+                .team-box.rank-2 { border-color: #b8c2cc; }
+                .team-box.rank-3 { border-color: #b56b2c; }
+                .team-box.rank-4,
+                .team-box.rank-5,
+                .team-box.rank-6 { border-color: #6b6b6b; }
+
+                /* Striscia colore del team a sinistra */
+                .team-box::before {
+                        content: '';
+                        position: absolute;
+                        left: 0; top: 0; bottom: 0;
+                        width: 8px;
+                        background: var(--team-color, #888);
+                        border-radius: 14px 0 0 14px;
+                }
+
+                .team-tag {
+                        font-size: clamp(20px, 4vw, 48px);
+                        font-weight: 800;
+                        letter-spacing: 1px;
+                        text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+                        white-space: nowrap;
+                }
+
+                .team-score {
+                        font-size: clamp(28px, 6vw, 72px);
+                        font-weight: 900;
+                        font-variant-numeric: tabular-nums;
+                        text-shadow: 0 2px 12px rgba(0,0,0,0.8);
+                        margin-left: auto;
+                }
+
+                /* Badge posizione */
+                .team-rank {
+                        position: absolute;
+                        top: 6px;
+                        right: 10px;
+                        font-size: 14px;
+                        font-weight: 700;
+                        opacity: 0.7;
+                }
+
+                /* Quando non ci sono team salvati */
+                #empty {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 100%;
+                        height: 100%;
+                        font-size: 18px;
+                        color: #fff8;
+                        text-align: center;
+                        padding: 20px;
+                }
+
+                /* Pulsante Picture-in-Picture: apre la pagina in una finestra
+                   separata che rimane sempre sopra le altre app, anche quando
+                   il browser principale è in background. */
+                #pipButton {
+                        position: fixed;
+                        top: 8px;
+                        right: 8px;
+                        padding: 6px 12px;
+                        background: rgba(20,20,30,0.85);
+                        color: #fff;
+                        border: 1px solid #fff3;
+                        border-radius: 8px;
+                        font-size: 12px;
+                        cursor: pointer;
+                        z-index: 1000;
+                        transition: background .2s ease, border-color .2s ease;
+                }
+                #pipButton:hover {
+                        background: rgba(40,40,60,0.95);
+                        border-color: var(--accent, #5b8cff);
+                }
+        </style>
+</head>
+<body>
+        <div id="overlay"></div>
+        <button id="pipButton" type="button" title="Open this page in a Picture-in-Picture window (always on top, even when browser is in background)">📺 PiP</button>
+        <script type="module" src="./obs-overlay.js"></script>
+</body>
+</html>

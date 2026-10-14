@@ -1,121 +1,159 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<meta charset="utf-8" />
-	<link rel="shortcut icon" href="./favicon.ico" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title data-i18n="title">MKW Mogi Manager</title>
-	<link rel="stylesheet" href="./style.css" />
+        <meta charset="utf-8" />
+        <link rel="shortcut icon" href="./favicon.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title data-i18n="title">MKW Mogi Manager</title>
+        <script>try{var _t=localStorage.getItem('theme')||'glass';if(_t==='gelato')_t='glass';document.documentElement.dataset.theme=_t;document.documentElement.dataset.fluid=localStorage.getItem('fluidHue')||'ocean'}catch(e){}</script>
+        <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
-	<header class="row">
-		<h1 style="font-size: 18px; font-weight: 600; margin:0" data-i18n="title">MKW Mogi Manager</h1>
-		<ins class="spacer"></ins>
-		<select id="locale" aria-label="Select locale">
-			<option value="en">English</option>
-			<option value="fr">Français</option>
-			<option value="de">Deutsch</option>
-			<option value="ja">日本語</option>
-		</select>
-		<a href="https://github.com/PFQNiet/mkw-lounge-tracker" target="_blank" rel="noopener noreferrer" aria-label="View source on GitHub" class="icon-btn" title="View on GitHub">
-			<img src="./img/github-logo.svg" width="20" height="20" aria-hidden="true" />
-		</a>
-	</header>
+        <header class="row">
+                <h1 style="font-size: 18px; font-weight: 600; margin:0" data-i18n="title">MKW Mogi Manager</h1>
+                <span style="font-size: 13px; color: #9aa0a6; margin-left: 8px;">Fork by Bholt</span>
+                <a href="https://discordapp.com/users/594798722940928001" target="_blank" rel="noopener noreferrer" aria-label="Contact Bholt on Discord" class="icon-btn" title="Discord: Bholt" id="discordLink" style="margin-left: 4px;">
+                        <img src="./img/discord-logo.svg" width="18" height="18" aria-hidden="true" />
+                </a>
+                <ins class="spacer"></ins>
+                <select id="locale" aria-label="Select locale">
+                        <option value="en">English</option>
+                        <option value="it">Italiano</option>
+                        <option value="es">Español</option>
+                        <option value="fr">Français</option>
+                        <option value="de">Deutsch</option>
+                        <option value="ja">日本語</option>
+                </select>
+                <select id="theme" aria-label="Select theme">
+                        <option value="glass">Glass</option>
+                        <option value="clean">Clean</option>
+                        <option value="fluid">Fluid</option>
+                </select>
+                <select id="fluidHue" aria-label="Fluid color">
+                        <option value="ocean">Ocean</option>
+                        <option value="rose">Rose</option>
+                        <option value="ember">Ember</option>
+                        <option value="sun">Sun</option>
+                        <option value="lime">Lime</option>
+                        <option value="violet">Violet</option>
+                </select>
+                <a href="https://github.com/PFQNiet/mkw-lounge-tracker" target="_blank" rel="noopener noreferrer" aria-label="View source on GitHub" class="icon-btn" title="View on GitHub">
+                        <img src="./img/github-logo.svg" width="20" height="20" aria-hidden="true" />
+                </a>
+        </header>
 
-	<div id="step1">
-		<section class="panel welcome" style="max-width:1100px; margin:16px auto;">
-			<div>
-				<p class="lead" data-i18n="landingPage.lead">Capture, OCR, score; right in your browser. No installs, no uploads.</p>
+        <div id="step1">
+                <section class="panel welcome" style="max-width:1100px; margin:16px auto;">
+                        <div class="welcome-left">
+                                <p class="lead" data-i18n="landingPage.lead">Capture, OCR, score; right in your browser. No installs, no uploads.</p>
 
-				<div class="chips">
-					<span class="chip" data-i18n="landingPage.features.0">Offline OCR</span>
-					<span class="chip" data-i18n="landingPage.features.1">Disconnect handler</span>
-					<span class="chip" data-i18n="landingPage.features.2">Manual resolve + edit</span>
-					<span class="chip" data-i18n="landingPage.features.3">Lounge export</span>
-				</div>
+                                <div class="chips">
+                                        <span class="chip" data-i18n="landingPage.features.0">Offline OCR</span>
+                                        <span class="chip" data-i18n="landingPage.features.1">Disconnect handler</span>
+                                        <span class="chip" data-i18n="landingPage.features.2">Manual resolve + edit</span>
+                                        <span class="chip" data-i18n="landingPage.features.3">Lounge export</span>
+                                </div>
 
-				<ul class="steps">
-					<li data-i18n="landingPage.steps.0"><strong>1.</strong> Click <em>Get started</em> and paste the 12-player roster (<code>1. Name (12345 MMR)</code>).</li>
-					<li data-i18n="landingPage.steps.1"><strong>2.</strong> Pick your virtual webcam in the preview area.</li>
-					<li data-i18n="landingPage.steps.2"><strong>3.</strong> After each race, hit <em>Capture &amp; OCR</em>. We'll auto-match; if unsure, we'll ask.</li>
-					<li data-i18n="landingPage.steps.3"><strong>4.</strong> Fix anything via <em>Edit</em> &rarr; <em>Save</em>. Export scores when done.</li>
-				</ul>
+                                <ul class="steps">
+                                        <li data-i18n="landingPage.steps.0"><strong>1.</strong> Click <em>Get started</em> and paste the 12-player roster (<code>1. Name (12345 MMR)</code>).</li>
+                                        <li data-i18n="landingPage.steps.1"><strong>2.</strong> Pick your virtual webcam in the preview area.</li>
+                                        <li data-i18n="landingPage.steps.2"><strong>3.</strong> After each race, the screenshot will be taken automatically, or manually.</li>
+                                        <li data-i18n="landingPage.steps.3"><strong>4.</strong> Fix anything via <em>Edit</em> &rarr; <em>Save</em>. Export scores when done.</li>
+                                        <li data-i18n="landingPage.steps.4"><strong>5.</strong> If you don't have a capture card, you can use the manual mode with <em>No capture card</em>.</li>
+                                </ul>
 
-				<div class="cta">
-					<button id="start" class="btn--primary" style="padding:10px 14px; font-weight:600;" data-i18n="landingPage.getStartedButton">🚀 Get started</button>
-				</div>
-			</div>
+                                <div class="cta">
+                                        <button id="start" class="btn--primary" style="padding:10px 14px; font-weight:600;" data-i18n="landingPage.getStartedButton">🚀 Get started</button>
+                                        <a href="./no-capture-card.html" class="button" style="padding:10px 14px; font-weight:600;" data-i18n="landingPage.noCaptureCardButton">🎮 No capture card</a>
+                                </div>
 
-			<div>
-				<div class="aside">
-					<h3 data-i18n="landingPage.notesLabel">Notes</h3>
-					<ul>
-						<li data-i18n="landingPage.notes.0">Race 1 must include all 12 players.</li>
-						<li data-i18n="landingPage.notes.1">10-player races are valid; 9 or fewer are a redo.</li>
-						<li data-i18n="landingPage.notes.2">Supports FFA, 2v2, 3v3, 4v4 and 6v6 Lounge Queue formats.</li>
-						<li data-i18n="landingPage.notes.3">Everything stays local in your browser.</li>
-						<li data-i18n="landingPage.notes.4">Auto-capture: detects when you take a screenshot on your Switch and automatically captures it.</li>
-					</ul>
-				</div>
+                                <div class="aside-row">
+                                        <div class="aside">
+                                                <h3 data-i18n="landingPage.notesLabel">Notes</h3>
+                                                <ul>
+                                                        <li data-i18n="landingPage.notes.0">Race 1 must include all 12 players.</li>
+                                                        <li data-i18n="landingPage.notes.1">10-player races are valid; 9 or fewer are a redo.</li>
+                                                        <li data-i18n="landingPage.notes.2">Supports FFA, 2v2, 3v3, 4v4 and 6v6 Lounge Queue formats.</li>
+                                                        <li data-i18n="landingPage.notes.3">Everything stays local in your browser.</li>
+                                                        <li data-i18n="landingPage.notes.4">Autocapture: detects when the race is finished and takes the screenshot automatically.</li>
+                                                </ul>
+                                        </div>
 
-				<div class="aside">
-					<h3 data-i18n="landingPage.aboutLabel">About</h3>
-					<ul>
-						<li data-i18n="landingPage.about.0">Made by <a href="https://github.com/PFQNiet" target="_blank" rel="noopener noreferrer">Niet</a></li>
-						<li data-i18n="landingPage.about.1"><a href="https://github.com/PFQNiet/mkw-lounge-tracker" target="_blank" rel="noopener noreferrer">View source on GitHub</a></li>
-						<li data-i18n="landingPage.about.2"><a href="https://github.com/PFQNiet/mkw-lounge-tracker/issues" target="_blank" rel="noopener noreferrer">Report a bug</a></li>
-					</ul>
-				</div>
-			</div>
-		</section>
-	</div>
+                                        <div class="aside">
+                                                <h3 data-i18n="landingPage.aboutLabel">About</h3>
+                                                <ul>
+                                                        <li data-i18n="landingPage.about.0">Made by Bholt</li>
+                                                        <li data-i18n="landingPage.about.1">Made by <a href="https://github.com/PFQNiet" target="_blank" rel="noopener noreferrer">Niet</a></li>
+                                                        <li data-i18n="landingPage.about.2"><a href="https://github.com/PFQNiet/mkw-lounge-tracker" target="_blank" rel="noopener noreferrer">View source on GitHub</a></li>
+                                                        <li data-i18n="landingPage.about.3"><a href="https://github.com/PFQNiet/mkw-lounge-tracker/issues" target="_blank" rel="noopener noreferrer">Report a bug</a></li>
+                                                </ul>
+                                        </div>
+                                </div>
+                        </div>
 
-	<div id="step2" style="display:none;">
-		<main class="row">
-			<section class="panel main-view">
-				<video id="preview" autoplay playsinline muted></video>
-				<div class="row">
-					<label>
-						<span class="muted" data-i18n="capture.camera">Camera</span>
-						<select id="camera"><option value="" data-i18n="loading">Loading...</option></select>
-					</label>
-					<ins class="spacer"></ins>
-					<button id="capture" class="btn--primary" accesskey="c" data-i18n="capture.captureButton">📸 Capture & OCR</button>
-					<label class="button"><input type="checkbox" id="autoCapture" /> <span data-i18n="capture.autoCaptureLabel">Auto-capture</span></label>
-				</div>
-				<div class="row">
-					<div class="panel panel--warning spacer" data-i18n="capture.localSaveReminder">⚠️ Remember to always screenshot on Switch as well!</div>
-					<label class="button"><input type="checkbox" id="useOverlay" /> <span data-i18n="capture.useOverlay">Connect overlay</span></label>
-				</div>
-			</section>
-			<section class="panel capture-view">
-				<h2 data-i18n="capture.lastCapture">Last capture</h2>
-				<ol id="output" class="results"></ol>
-			</section>
-		</main>
+                        <div class="welcome-right">
+                                <div class="aside fork-features">
+                                        <h3 class="fork-features__title" data-i18n="landingPage.forkFeaturesLabel">🆕 New fork's features</h3>
+                                        <ul>
+                                                <li data-i18n="landingPage.forkFeatures.0"><strong>Autocapture (race end):</strong> automatic capture when the in-race symbols disappear — no manual screenshot needed.</li>
+                                                <li data-i18n="landingPage.forkFeatures.1"><strong>No capture card mode:</strong> track scores manually by picking players position by position.</li>
+                                                <li data-i18n="landingPage.forkFeatures.2"><strong>OBS scores overlay:</strong> transparent browser-source overlay with team scores for OBS.</li>
+                                                <li data-i18n="landingPage.forkFeatures.3"><strong>Team rank icons:</strong> custom team icons based on standings position (1st..6th).</li>
+                                                <li data-i18n="landingPage.forkFeatures.4"><strong>Gap column + position column</strong> on the scoreboard.</li>
+                                                <li data-i18n="landingPage.forkFeatures.5"><strong>Smart autofill</strong> with tag-based team matching and OCR dropdown for manual fixes.</li>
+                                                <li data-i18n="landingPage.forkFeatures.6"><strong>Auto re-analyze</strong> past races when the roster is edited.</li>
+                                                <li data-i18n="landingPage.forkFeatures.7"><strong>Race timer</strong> driven by the in-race symbols (start/stop/reset automatic).</li>
+                                                <li data-i18n="landingPage.forkFeatures.8"><strong>IT / ES translations</strong> added (besides EN/FR/DE/JA).</li>
+                                                <li data-i18n="landingPage.forkFeatures.9"><strong>Streamlined roster setup</strong>: room, MMR and tier are now optional.</li>
+                                        </ul>
+                                </div>
+                        </div>
+                </section>
+        </div>
 
-		<!-- Scoreboard -->
-		<section class="panel" style="max-width:1100px; margin:16px auto;">
-			<h2 data-i18n="scoreboard.title">Scoreboard</h2>
-			<div style="overflow:auto;">
-				<table id="scoreTable" class="score mono" style="width:100%; border-collapse:collapse;"></table>
-			</div>
-			<div class="row">
-				<a href="./" class="button btn--danger" data-i18n="scoreboard.newSessionButton">🧹 New session</a>
-				<ins class="spacer"></ins>
-				<button id="snapshotScores" data-i18n="scoreboard.snapshotScoresButton">🖼️ Snapshot</button>
-				<button id="downloadMogi" disabled data-i18n="scoreboard.downloadZipButton">📦 Download ZIP</button>
-				<button id="exportScores" class="btn--primary" disabled data-i18n="scoreboard.exportScoresButton">📤 Export scores</button>
-			</div>
-		</section>
+        <div id="step2" style="display:none;">
+                <main style="display:block; width:100%; max-width:1100px; margin:16px auto; padding:0; box-sizing:border-box;">
+                        <section class="panel main-view" style="flex:none; min-width:0; width:100%; box-sizing:border-box;">
+                                <video id="preview" autoplay playsinline muted></video>
+                                <div class="row">
+                                        <label>
+                                                <span class="muted" data-i18n="capture.camera">Camera</span>
+                                                <select id="camera"><option value="" data-i18n="loading">Loading...</option></select>
+                                        </label>
+                                        <ins class="spacer"></ins>
+                                        <button id="capture" class="btn--primary" accesskey="c" data-i18n="capture.captureButton">📸 Capture & OCR</button>
+                                        <label class="button"><input type="checkbox" id="autoCapture" /> <span data-i18n="capture.autoCaptureLabel">Nintendo screenshot</span></label>
+                                        <label class="button"><input type="checkbox" id="autoCaptureRaceEnd" /> <span data-i18n="capture.autoCaptureRaceEndLabel">Autocapture</span></label>
+                                </div>
+                                <div class="row">
+                                        <div class="panel panel--warning spacer" data-i18n="capture.localSaveReminder">⚠️ Remember to always screenshot on Switch as well!</div>
+                                </div>
+                        </section>
+                </main>
 
-		<!-- Race history (snapshots) -->
-		<section class="panel" style="max-width:1100px; margin:16px auto;">
-			<h2 data-i18n="gallery.title">Race history</h2>
-			<div id="raceGallery" class="gallery" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap:10px;"></div>
-		</section>
-	</div>
+                <!-- Scoreboard -->
+                <section class="panel" style="width:100%; max-width:1100px; margin:16px auto; padding:12px; box-sizing:border-box;">
+                        <h2><span data-i18n="scoreboard.title">Scoreboard</span> <span id="raceTimer" class="race-timer" title="Tempo gara (passivo: parte con le icone, si ferma allo screenshot)">0:00.0</span></h2>
+                        <div style="overflow:auto; min-width:0; max-width:100%;">
+                                <table id="scoreTable" class="score mono" style="width:100%; border-collapse:collapse;"></table>
+                        </div>
+                        <div class="row">
+                                <a href="./" class="button btn--danger" data-i18n="scoreboard.newSessionButton">🧹 New session</a>
+                                <ins class="spacer"></ins>
+                                <button id="snapshotScores" data-i18n="scoreboard.snapshotScoresButton">🖼️ Snapshot</button>
+                                <button id="obsOverlay" data-i18n="scoreboard.obsOverlayButton">📺 OBS scores overlay</button>
+                                <button id="downloadMogi" disabled data-i18n="scoreboard.downloadZipButton">📦 Download ZIP</button>
+                                <button id="exportScores" class="btn--primary" disabled data-i18n="scoreboard.exportScoresButton">📤 Export scores</button>
+                        </div>
+                </section>
 
-	<script type="module" src="./main.js"></script>
+                <!-- Race history (snapshots) -->
+                <section class="panel" style="width:100%; max-width:1100px; margin:16px auto; padding:12px; box-sizing:border-box;">
+                        <h2 data-i18n="gallery.title">Race history</h2>
+                        <div id="raceGallery" class="gallery" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap:10px;"></div>
+                </section>
+        </div>
+
+        <script type="module" src="./main.js"></script>
 </body>
 </html>

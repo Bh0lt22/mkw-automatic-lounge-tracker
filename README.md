@@ -1,114 +1,206 @@
-# MKW Mogi Manager
+# MKW Mogi Manager (con auto-capture race-end)
 
-## Overview
+Fork di [PFQNiet/mkw-lounge-tracker](https://github.com/PFQNiet/mkw-lounge-tracker)
+con un nuovo sistema di auto-capture che scatta automaticamente la foto della
+leaderboard quando i simboli di gara (moneta + bandierina del lap) spariscono
+dallo schermo.
 
-**MKW Mogi Manager** is a tool to simplify tracking scores during competitive **Mario Kart World Lounge mogis**. Instead of manually writing down results, the app captures screenshots of the scoreboard, reads the names and scores, and keeps track of everything automatically. At the end of the session, you can export results in the format needed for **Lounge Discord bots**, along with a full package of screenshots and race data for reference.
+## Avvio rapido (localhost)
 
-👉 Live site: [https://pfqniet.github.io/mkw-lounge-tracker/](https://pfqniet.github.io/mkw-lounge-tracker/)
+### Requisiti
 
-## Quick Start
+- [Node.js](https://nodejs.org/) versione 14 o superiore
+- Una capture card collegata alla Switch, con output configurato come webcam
+  virtuale (OBS Virtual Camera o equivalente)
 
-1. **Open the app** (see link above).
-2. **Paste participants list** from Lounge bot into the app.
-3. **Select video device** (your OBS virtual webcam).
-4. *(Optional)* Use **Pause Menu → Auto-fill** to set names.
-5. After each race, on the **results screen**:
+### Avviare il server
 
-   * **Click Capture**, or
-   * Use **Auto-Capture** (when you take a Switch screenshot).
-6. **Check results** and fix any names/scores if needed.
-7. After **12 races**, **Finish Session** → export to Discord or download ZIP.
+Apri il terminale nella cartella del progetto ed esegui:
 
-For detailed instructions, see below.
+```bash
+node server.js
+```
 
-## Key Features
+Oppure (equivalente):
 
-* **Automatic Score Tracking** – Capture the scoreboard and let the app fill in scores for you.
-* **Supports All Formats** – Free-for-all, 2v2, 3v3, 4v4, and 6v6.
-* **Session Management** – Keeps track of all 12 races in a standard mogi.
-* **Auto-Capture** – Optionally, the app can capture results automatically whenever you take a screenshot on your Switch.
-* **Easy Fixes** – If the app makes a mistake, you can quickly correct names or scores before moving on.
-* **Export Options** – Generate results for posting in Lounge, and download a ZIP with all data and screenshots.
-* **Multiple Languages** – Available in English, French, German, and Japanese.
+```bash
+npm start
+```
 
-## What You Need
+Vedrai in console:
 
-* A computer with a **capture card** connected to your console.
-* A **web browser** (latest Chrome, Firefox, or Safari recommended).
-* **OBS** or similar software to output your gameplay as a virtual webcam.
+```
+┌────────────────────────────────────────────────────────────┐
+│  MKW Lounge Tracker — server locale                       │
+├────────────────────────────────────────────────────────────┤
+│  Apri nel browser:  http://localhost:8000                  │
+│  Per fermare il server: Ctrl+C                            │
+└────────────────────────────────────────────────────────────┘
+```
 
-## How to Use
+Apri **http://localhost:8000** nel browser (Chrome o Firefox consigliati).
 
-### Start a Session
+Per usare una porta diversa:
 
-1. **Copy and paste** the **participants list** provided by the Lounge bot into the app (e.g. `1. Name1, Name2 (12345 MMR)` for a 2v2 format).
+```bash
+PORT=9000 node server.js
+```
 
-![Paste player list](./img/docs/1-paste-roster.jpg)
+Non serve `npm install`: il server usa solo moduli nativi di Node.
 
-2. **Select** your video capture device (the virtual webcam from OBS).
+### Fermare il server
 
-3. *(Optional)* Use the **Pause Menu** in-game and click **Auto-fill** to let the app learn player names ahead of time.
+Nel terminale: `Ctrl+C`
 
-![Setup teams](./img/docs/2-edit-roster.jpg)
+## Come usare il bot
 
-### After Each Race
+### Setup iniziale (una volta sola per sessione)
 
-1. When the **race results screen** is shown *(before it transitions to the overall session rankings)*, trigger a capture:
+1. Apri http://localhost:8000 nel browser.
+2. **Incolla la lista partecipanti** fornita dal bot Lounge Discord nel campo
+   in alto (es. `1. Name1, Name2 (12345 MMR)` per un 2v2).
+3. Clicca **Start**.
+4. **Seleziona la video device** (la webcam virtuale di OBS collegata alla
+   capture card).
+5. *(Opzionale)* Usa il **Pause Menu** in game e clicca **Auto-fill** per far
+   imparare al bot i nomi dei giocatori in anticipo.
 
-   * **Click** **Capture** in the app, **or**
-   * Use **Auto-Capture** (if enabled), which listens for when you take a Switch screenshot and captures automatically.
-2. The app will **read the names and scores** from the results screen.
+### Durante le gare — modalità automatica (NUOVA)
 
-![Capture results](./img/docs/3-capture-results.jpg)
+1. Attiva il toggle **"Auto-capture (race end)"** in alto.
+2. Verifica in console (F12) che appaia:
+   ```
+   [race-end] Riferimento caricato: 2737 pixel non-trasparenti.
+   [race-end] IDLE -> RACING
+   ```
+   quando inizia la prima gara.
+3. Gioca normalmente. A fine gara, quando i simboli della moneta e della
+   bandierina scompaiono:
+   ```
+   [race-end] RACING -> WAITING (countdown di 3000 ms)
+   [race-end] WAITING -> CAPTURING (inizio loop di cattura)
+   [race-end] CAPTURING tentativo 1/30
+   ```
+4. Il bot prova a catturare la scoreboard ogni 500 ms, massimo 30 tentativi
+   (15 secondi). Quando la scoreboard viene rilevata correttamente:
+   ```
+   [race-end] CAPTURING -> COOLDOWN (cattura riuscita)
+   ```
 
-3. **Check the results**:
+### Durante le gare — modalità manuale (originale)
 
-   * ✅ If everything looks good, continue.
-   * ❌ If something is wrong, **click to edit** the player name or score.
+1. Lascia disattivato il toggle "Auto-capture (race end)".
+2. Quando la **race results screen** è visibile (prima che diventi session
+   rankings), clicca **Capture** oppure usa il toggle **"Auto-capture"**
+   (scatta quando rileva il simbolo Home della cattura Switch).
 
-![Edit race](./img/docs/5-edit-race.jpg)
+### Fine sessione
 
-### Finishing Up
+1. Dopo 12 gare, **Finish Session**.
+2. Esporta con **Discord Export** (copia i punteggi per Lounge) oppure
+   **Full Export** (ZIP con tutti i dati e screenshot).
 
-1. After **12 races**, verify your results.
+## Come funziona l'auto-capture race-end
 
-![Scoreboard](./img/docs/4-scoreboard.jpg)
+Il file `img/race-end-reference.png` è uno screenshot 1920×1080 RGBA dove solo
+i pixel della moneta e della bandierina del lap counter sono colorati; il
+resto è trasparente (alpha = 0).
 
-2. Choose how you want to export:
+Il bot:
+1. Carica il PNG una volta sola all'avvio, estraendo i pixel non-trasparenti.
+2. Ogni 200 ms cattura un frame dal `<video>` della capture card.
+3. Confronta SOLO i pixel del reference con i pixel corrispondenti del frame.
+4. Se ≥ 75% dei pixel combacia (distanza RGB ≤ 80) → simboli presenti.
+5. State machine:
+   - `IDLE` → `RACING` quando i simboli compaiono
+   - `RACING` → `WAITING` quando spariscono (3 check consecutivi)
+   - `WAITING` → countdown di 3 secondi, annulla se riappaiono
+   - `CAPTURING` → loop di retry ogni 500 ms, max 30 tentativi
+   - `COOLDOWN` → 5 secondi dopo una cattura, poi torna a `IDLE`
 
-   * **Discord Export** – Copy the formatted scores to post in Lounge.
-   * **Full Export** – Download a ZIP with results, a summary, and all screenshots.
+## Personalizzare il PNG di riferimento
 
-![Lounge export](./img/docs/6-export-scores.jpg)
+Se cambi capture card, risoluzione, o vuoi aggiornare i simboli:
 
-## Fixing Problems
+1. Fai uno screenshot 1920×1080 durante una gara (dal `<video>` del browser,
+   non dalla Switch direttamente — vedi snippet in `RACE_END_GUIDE.md`).
+2. Aprilo in Photoshop / GIMP.
+3. Seleziona e ritaglia SOLO i pixel della moneta e della bandierina.
+4. Mettili su un livello, rendi trasparente lo sfondo.
+5. Salva come PNG RGBA 1920×1080 in `img/race-end-reference.png`.
+6. Ricarica la pagina.
 
-Sometimes the app might not read everything perfectly. Here's what you can do:
+Per verificare visivamente dove si aspetta i simboli il bot, esegui in console
+(F12) lo snippet in `RACE_END_GUIDE.md` → sezione "Risoluzione problemi".
 
-* **No names detected** – Make sure you're on the results or pause screen and try again.
-* **Wrong name or score** – Click to edit it before moving on.
-* **Missing players** – Add them in manually if needed.
+## Parametri tarabili
 
-## Limitations
+In `src/ui/autocapture-toggle.js` (in cima al file):
 
-* The app may struggle if players have **very similar in-game names**, or even **identical names in team formats**. It will do its best to match them correctly, but you may need to step in and fix these manually.
-* OCR accuracy depends on **video quality**. Lower brightness or sharpness may make results harder to read.
+```js
+const RACE_END_CONFIG = {
+    pollIntervalMs: 200,            // frequenza check
+    racingConfirmHits: 2,           // conferme per "in gara"
+    goneConfirmHits: 3,             // conferme per "simboli spariti"
+    captureDelayMs: 3000,           // countdown prima di catturare
+    cooldownMs: 5000,               // pausa dopo una cattura
+    captureRetryIntervalMs: 500,    // attesa tra tentativi falliti
+    maxCaptureRetries: 30,          // max tentativi (15s totali)
+    matchTolerance: 80,             // distanza RGB max per pixel match
+    matchRatio: 0.75,               // % di pixel che devono combaciare
+};
+```
 
-## Tips
+## Struttura del progetto
 
-* Always **capture from the race results screen**, not the session rankings.
-* Use the **pause menu at the start** for smoother auto-filling of names during the session.
-* **Team formats** are detected automatically from the participants list.
-* You don't need to upload anything online. Everything runs **locally in your browser**.
+```
+mkw-lounge-tracker-master/
+├── server.js                       # Server HTTP statico (Node nativo)
+├── package.json                    # Script di avvio
+├── index.html                      # Pagina principale
+├── main.js                         # Entry point
+├── style.css                       # Stili
+├── favicon.ico
+├── globals.d.ts
+├── jsconfig.json
+├── README.md                       # Questo file
+├── RACE_END_GUIDE.md               # Guida dettagliata race-end
+├── LICENSE
+│
+├── src/
+│   ├── autocapture.js              # checkOverlay (originale) + checkRaceSymbols (nuovo)
+│   ├── capture.js                  # Cattura frame + OCR
+│   ├── ocr.js                      # OCR con Tesseract.js
+│   ├── mogi.js, race.js, player.js, roster.js, team.js
+│   ├── util.js, export-zip.js
+│   ├── i18n/                       # Traduzioni (en, fr, de, ja)
+│   └── ui/                         # Componenti UI
+│       └── autocapture-toggle.js   # State machine race-end
+│
+├── img/
+│   ├── race-end-reference.png      # ⭐ PNG di riferimento moneta+bandierina
+│   ├── home-icon-reference.png     # Riferimento icona Home (originale)
+│   └── docs/                       # Screenshot della documentazione
+│
+├── scripts/
+│   └── generate_bitmask.py         # Utility legacy per bitmask (non più usata)
+│
+└── obs-companion/                  # Server OBS separato (opzionale)
+```
 
----
+## Limitazioni
 
-That's it! **MKW Mogi Manager** is designed to save you time and effort so you can focus on racing. If something goes wrong, you always have the chance to fix it before results are final.
+- L'OCR può sbagliare con nomi molto simili tra giocatori.
+- La qualità dell'OCR dipende dalla qualità della capture card.
+- L'auto-capture race-end richiede che i simboli siano visibili a inizio gara
+  (altrimenti resta in `IDLE`). Se la tua capture card ha risoluzione diversa
+  da 1920×1080, devi rifare il PNG di riferimento con le coordinate giuste.
 
-## Contributing & Feedback
+## Crediti
 
-This is an **open-source project**. If you'd like to contribute, report bugs, or suggest new features, please visit:
+- Progetto originale: [PFQNiet/mkw-lounge-tracker](https://github.com/PFQNiet/mkw-lounge-tracker)
+- Estensione race-end auto-capture: implementata in questa fork.
 
-🔗 [**MKW Mogi Manager on GitHub**](https://github.com/PFQNiet/mkw-lounge-tracker)
+## Licenza
 
-Bug reports and feedback are always welcome through **GitHub issues**.
+Vedi `LICENSE`.

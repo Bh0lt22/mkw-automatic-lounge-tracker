@@ -1,0 +1,14 @@
+{
+  "name": "mkw-lounge-tracker",
+  "version": "1.0.0",
+  "description": "MKW Mogi Manager con auto-capture race-end basato su confronto pixel-by-pixel",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "serve": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=14"
+  }
+}

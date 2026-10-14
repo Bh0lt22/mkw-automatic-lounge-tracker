@@ -68,27 +68,30 @@ async function startSelectedCamera(deviceId, video) {
 /**
  * @param {HTMLButtonElement} captureButton
  * @param {HTMLVideoElement} video
- * @param {HTMLOListElement} resultsList
+ * @param {HTMLOListElement|null} resultsList Sezione "Last capture" rimossa:
+ *   può essere null, in tal caso il render della lista viene saltato
+ *   (la scoreboard continua ad aggiornarsi normalmente).
  * @param {Mogi} mogi
  */
 export function setupCaptureButton(captureButton, video, resultsList, mogi) {
-	captureButton.addEventListener('click', async () => {
-		if( mogi.ended) {
-			warning(t('capture.maxRacesReached'));
-			return;
-		}
-		captureButton.disabled = true;
-		captureButton.textContent = t('processing');
-		await captureResultsScreen(video, mogi);
-		captureButton.disabled = false;
-		captureButton.textContent = t('capture.captureButton');
-	});
+        captureButton.addEventListener('click', async () => {
+                if( mogi.ended) {
+                        warning(t('capture.maxRacesReached'));
+                        return;
+                }
+                captureButton.disabled = true;
+                captureButton.textContent = t('processing');
+                await captureResultsScreen(video, mogi);
+                captureButton.disabled = false;
+                captureButton.textContent = t('capture.captureButton');
+        });
 
-	mogi.addEventListener('update', () => {
-		const latest = mogi.races.at(-1);
-		if (!latest) renderEmptyResults(resultsList);
-		else renderResults(resultsList, latest.placements, mogi);
-	});
+        if (!resultsList) return;
+        mogi.addEventListener('update', () => {
+                const latest = mogi.races.at(-1);
+                if (!latest) renderEmptyResults(resultsList);
+                else renderResults(resultsList, latest.placements, mogi);
+        });
 }
 
 /**

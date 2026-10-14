@@ -1,0 +1,794 @@
+================================================================
+ MKW LOUNGE TRACKER — CHANGELOG
+================================================================
+
+Tutte le modifiche apportate al progetto, dalla versione originale
+di PFQNiet (https://github.com/PFQNiet/mkw-lounge-tracker) fino ad
+oggi.
+
+----------------------------------------------------------------
+[4.1] — Rimosso Gelato, Fluid con 6 colori, vetro Apple su Glass+Fluid
+----------------------------------------------------------------
+
+- RIMOSSO tema Gelato (select, CSS, theme-switcher). Chi lo aveva salvato
+  viene migrato a Glass (anti-flash + applyTheme). Restano 3 temi:
+  Glass / Clean / Fluid.
+- FLUID con 6 varianti colore via select #fluidHue (visibile solo con Fluid):
+  Ocean (azzurro/blu default), Rose (rosa), Ember (rosso), Sun (giallo),
+  Lime (verde), Violet (viola). Solo data-attribute + variabili CSS
+  (--fluid-a/b/c/d), salvataggio in localStorage. File: theme-switcher.js,
+  index.html, no-capture-card.html, style.css.
+- GLASS scuro (fix bianco): tolta la tinta bianca lattiginosa, tornati i
+  colori scuri originali con blur più forte (26px pannelli / 22px bottoni),
+  bordi spessi 2px #4a4a52 e ombre profonde 0 20px 55px. Stesso vetro scuro
+  anche sul Fluid. Clean resta solido senza vetro.
+- NIENTE SCATOLE NELLE SCATOLE (v4.2): in Glass/Fluid gli elementi dentro
+  i pannelli (bottoni, select, toggle, step, chip, aside, CTA) sono piatti
+  e senza bordo; il vetro appare solo su hover/focus. Header e dialog
+  restano bordati. Il primario resta riconoscibile (tinta verde).
+- VETRO FIGMA (v4.2): solo Glass/Fluid, bordo luce irregolare con ::before
+  (bianco luminoso in alto che svanisce in basso), highlight inset solo in
+  alto, blur 30px sotto i pannelli. Solo colori scuri, niente tinta bianca.
+- TAG VELOCI NEI TEAM EVENT (v4.4, fix v4.5/v4.6): l'autofill estrae
+  automaticamente SOLO il primo carattere di ogni nome OCR e li salva nel
+  mogi; nella riga tag
+  dell'Edit Roster c'è ora una   dropdown (colonna OCR) con le iniziali
+  salvate: selezionandone una il tag si compila da solo. Si aggiorna dopo
+  ogni autofill, si svuota con Reset names. Come per i player, i tag già
+  usati appaiono sbarrati in rosso e disabilitati (anche scritti a mano).
+  Fix v4.6: max 6 iniziali diverse (le letture fantasma oltre la sesta,
+  tipo la R, vengono scartate tenendo le più frequenti) e maiuscole/
+  minuscole preservate (se il tag è "l" resta "l"). Il matching L1 resta
+  case-insensitive quindi funziona comunque.
+- AUTOFILL FERREO NEI TEAM EVENT (v4.7, bug Birdo/Ugo/BIRBO doppi):
+  REGOLA 1 — mai fuori team: L2 assegna solo se il nome inizia col tag
+  del team del player (tag letti dal form, prima usava quelli salvati
+  vecchi) e L3 cerca solo dentro il team del tag; il resto va manuale.
+  REGOLA 2 — mai duplicati: valori già negli input seedati come usati
+  (ricliccare non duplica più), testi OCR letti 2+ volte non assegnati
+  a nessuno (manuale). File: edit-roster-dialog.js.
+  File: capture.js (extractInitials), mogi.js (detectedInitials),
+  edit-roster-dialog.js.
+- TASTO CLOSE NEL ROSTER SETUP (v4.10): accanto a Confirm c'è ora Close
+  (tradotto in tutte le lingue con la chiave cancel esistente) che chiude
+  il dialog e torna alla landing. File: set-roster-dialog.js.
+- RIMOSSA SEZIONE LAST CAPTURE (v4.8): il pannello a destra del video è stato
+  tolto, il video ora occupa tutta la larghezza. Il main ha lo stesso box
+  esterno della scoreboard (max-width 1100px, margin 16px auto, padding 0)
+  così i due rettangoli sono allineati verticalmente. setupCaptureButton
+  accetta output null e salta il render lista (scoreboard invariata).
+  Fix v4.9: entrambi i pannelli ora usano width 100% + border-box con lo
+  stesso max-width, così la tabella larga non può più allargare la
+  scoreboard oltre il video (wrapper con min-width 0 e scroll interno).
+  Stesso box anche per Race history (v4.11).
+- VETRO ATTENUATO + SFONDO AMBIENT (v4.3, riferimento Rocket Launcher):
+  bianchi dimezzati (filetto .55→.28, inset .35→.14), pannelli più
+  trasparenti (.66→.55) così si vede lo sfondo blurrato. Sfondo non più
+  nero piatto: aloni teal in alto a sinistra + blu in basso a destra su
+  base quasi nera, animazione rallentata a 32s. Senza aloni il vetro su
+  nero non si nota.
+- PRESTAZIONI: blur 28px + saturate costa più GPU del blur 16px di prima
+  (soprattutto con OBS + capture attivi). Se gli screenshot ritardano o la
+  ventola parte, usa Clean durante la mogi. Fluid resta il più pesante
+  (2 layer animati); i cambi colore non aggiungono costo (solo variabili CSS).
+  OCR/autocapture invariati.
+
+----------------------------------------------------------------
+[4.0] — Landing GUI + testi + 4 temi (Glass/Clean/Gelato/Fluid)
+----------------------------------------------------------------
+
+- LANDING: Notes+About spostati a sinistra sotto Get started/No capture
+  (nuove classi welcome-left/welcome-right), fork-features da sola a destra
+  con stretch + righe più spaziate (gap 10px, line-height 1.65) così il fondo
+  si allinea con Notes/About. File: index.html, style.css.
+- TESTI (6 lingue en/it/es/fr/de/ja): step 3 = screenshot automatico oppure
+  manuale; nuovo step 5 = modo manuale con No capture card; notes ultimo =
+  Autocapture rileva fine gara e scatta da sola; about primo punto =
+  "Made by Bholt" (link GitHub personali in futuro).
+- TEMI: nuovo select #theme accanto a #locale (index + no-capture-card),
+  salvataggio in localStorage, anti-flash inline. Glass (default, vetro scuro),
+  Clean (pitch dark solido, zero animazioni), Gelato (pastello Sky-High-Sundae
+  fragola/mint/cielo), Fluid (liquido animato + glass). Pulsanti con pop
+  scale 1.06 hover / 0.97 active (solo transform, economico).
+  File: src/ui/theme-switcher.js (nuovo), main.js, no-capture-card.js,
+  no-capture-card.html, style.css.
+- REVERT: backup-pre-gui/ con originali (index, style, main, no-capture,
+  6 i18n). Per tornare indietro ricopia sopra + cancella theme-switcher.js.
+- PRESTAZIONI: landing/testi/temi sono solo CSS/DOM, non toccano
+  RACE_END_CONFIG né OCR. Glass/Gelato usano backdrop-blur (GPU, di solito
+  trascurabile); Fluid anima 2 pseudo-elementi (pausa automatica in tab
+  nascoste + stop con prefers-reduced-motion); Clean è a costo zero.
+  Se gli screenshot ritardano o OBS scatta, usa Clean durante la mogi.
+
+----------------------------------------------------------------
+[3.6] — Timer passivo: stop solo se icone sparite >1.5s (anti-caduta)
+----------------------------------------------------------------
+
+- Il timer NON si ferma più subito su WAITING: continua a contare per
+  1500ms (STOP_DELAY_MS in race-timer.js). Cadute dalla track / pochi
+  frame senza icone → torna RACING e non si ferma mai. Solo se resta
+  sparito oltre 1.5s congela il tempo. CAPTURING/COOLDOWN → stop subito.
+  Costo: un setTimeout in più, zero letture video, zero rallentamenti
+  alla cattura (RACE_END_CONFIG invariato).
+
+----------------------------------------------------------------
+[3.5] — Race timer PASSIVO (prova, revert sicuro in backup-pre-timer)
+----------------------------------------------------------------
+
+- NUOVO cronometro passivo accanto a "Scoreboard" (div #raceTimer).
+  NON aggiunge alcun polling video: riusa l'unico tick esistente
+  (200ms) tramite callback onStateChange in setupAutoCaptureRaceEnd.
+  RACING → parte da 0 (verde), WAITING/CAPTURING/COOLDOWN → stop e
+  congela il tempo (rosso), WAITING→RACING (falso allarme) → riprende,
+  IDLE → fermo senza resettare il display. Update solo con
+  requestAnimationFrame. RACE_END_CONFIG invariato.
+  File: src/ui/race-timer.js (nuovo), src/ui/autocapture-toggle.js
+  (emit/onStateChange), index.html (div), style.css (.race-timer),
+  main.js (wiring).
+- REVERT (se non ti piace, torni a pre-timer come se niente fosse):
+  cartella backup-pre-timer/ con copie originali di
+  autocapture-toggle.js, main.js, index.html, style.css.
+  Basta ricopiarle sopra + cancellare src/ui/race-timer.js.
+
+----------------------------------------------------------------
+[3.4] — Fix pause screen: quarta linea y=260-315, rimosso blank y=490
+----------------------------------------------------------------
+
+- AUTOFILL EDIT ROSTER: le box #4/#10 a y=338 saltavano la 4a riga
+  (shrezwick/Bholt) leggendo la 5a (manmaru/ombra). Bholt e shrezwick
+  finivano su blank con dist 27 (blankCost). Nuova griglia:
+  25(h67), 102(h65), 178(h64), 260(h55, misura utente), 338(h46),
+  414(h46). y=490 era vuoto (whiteRatio 0) e causava misassignment.
+  File: src/ocr.js (buildPauseRects).
+
+----------------------------------------------------------------
+[3.3] — Fix pause screen con misure utente + JSON debug
+----------------------------------------------------------------
+
+- AUTOFILL EDIT ROSTER (pause screen), 1920x1080:
+  riga0 y25 h67 (25-92, confermata), riga1 y102 h65 (102-167),
+  riga2 y178 h64 (178-242), righe3-5 abbassate di 5px intere
+  (338, 414, 490 h46). Il JSON mostrava riga1 con conf 36 e cost 3/4
+  (box 151-227 troppo basso), riga0 OK (conf 91/94).
+  File: src/ocr.js (buildPauseRects con rect espliciti).
+  Screenshot utente conferma box vecchi disallineati sotto i nomi.
+
+----------------------------------------------------------------
+[3.2] — Fix pause screen: anche seconda riga rialzata a y=151-227
+----------------------------------------------------------------
+
+- AUTOFILL EDIT ROSTER: la v3.1 prendeva la 1a riga (25-92) ma perdeva
+  la 2a (181 h46 troppo bassa/stretta). Riportata la 2a riga a
+  y=151 h=76 come in v2.9 quando veniva rilevata.
+  File: src/ocr.js (buildPauseRects).
+  => y = 25(h67), 151(h76), 257, 333, 409, 485 (h46).
+
+----------------------------------------------------------------
+[3.1] — Fix pause screen: solo prima riga a y=25-92
+----------------------------------------------------------------
+
+- AUTOFILL EDIT ROSTER (pause screen): la v3.0 aveva spostato TUTTE
+  le righe (25->640) rompendo le 10/12 che già funzionavano.
+  Ripristinate le righe 2-6 originali, corretta SOLO la prima riga
+  con misura utente su 1920x1080: y=25 -> y=92 (h=67).
+  File: src/ocr.js (buildPauseRects).
+  Dettaglio: base startY=90, rowHeight=76, vPad=15 + override
+  col[0].y=25, col[0].h=67 per entrambe le colonne
+  (sx x=260, dx x=670, w=240).
+  => y = 25(h67), 181, 257, 333, 409, 485 (h46).
+
+----------------------------------------------------------------
+[3.0] — Fix pause screen post-update (tutti i nomi più in alto)
+----------------------------------------------------------------
+
+- AUTOFILL EDIT ROSTER (pause screen): dopo l'ultimo update di Mario
+  Kart la GUI della pausa ha TUTTI i nomi spostati più in alto.
+  Ricalibrata l'intera griglia OCR su canvas 1920x1080 con i valori
+  dell'utente: prima riga a y=25, ultima riga a y=640.
+  File: src/ocr.js (buildPauseRects).
+  Dettaglio: startY=13, rowHeight=123, vPad=12, stesse x/w
+  (sx x=260, dx x=670, w=240).
+  => y = 25, 148, 271, 394, 517, 640 | h = 99 (prima 46) | gap 24px.
+  Sostituisce il fix precedente v2.9 (EXTRA_TOP solo prime 2 righe,
+  non sufficiente).
+  SUPERATO dalla v3.1 (solo prima riga, resto ripristinato).
+
+----------------------------------------------------------------
+[2.9] — Fix pause screen post-update (primi due nomi più in alto)
+----------------------------------------------------------------
+
+- AUTOFILL EDIT ROSTER (pause screen): dopo l'ultimo update di Mario
+  Kart la GUI della pausa ha i primi due nomi un po' più in alto
+  rispetto a prima. Ingrandito lo spazio di lettura OCR verso l'alto
+  per le prime due righe di ogni colonna.
+  File: src/ocr.js (nuova funzione buildPauseRects usata da
+  OCR_GRID.pauseRects).
+  Dettaglio: EXTRA_TOP = 30px sulle righe 0-1 di entrambe le colonne
+  (sinistra x=260 e destra x=670). Altezza prime 2 righe: 46px -> 76px,
+  stesso fondo, nessun overlap (riempie esattamente il gap di 30px tra
+  le righe). Le altre 4 righe per colonna restano invariate (startY=90,
+  rowHeight=76, vPad=15). Nessun altro file toccato.
+  SUPERATO dalla v3.0 (griglia completa 25->640).
+
+- NUOVA CARTELLA: copia completa del progetto originale
+  "Mario Kart Bot" in "mario kart bot 2" sul Desktop. Il progetto
+  originale NON è stato modificato.
+
+----------------------------------------------------------------
+[2.8] — Rimosso timer gara (causa interferenza con autocapture)
+----------------------------------------------------------------
+
+- RIMOZIONE COMPLETA TIMER: rimosso completamente il race timer
+  (introdotto in v2.6). Cause:
+    * il polling del timer (ogni 200ms) interferiva con il polling
+      del race-end autocapture, che deve confrontare il frame con
+      il reference PNG. Avere due checkRaceSymbols concorrenti
+      caricava la CPU e ritardava l'auto-capture, portando a
+      screenshot in ritardo (3 su 6 segnalati).
+    * l'utente ha preferito rimuovere la funzione per non
+      rischiare di rompere il sistema di cattura.
+  Rimossi:
+    * <div id="raceTimer"> da index.html
+    * import checkRaceSymbols da main.js
+    * funzione setupRaceTimer in main.js
+    * CSS .race-timer / .is-running / .is-stopped da style.css
+
+  Nota: la funzione checkRaceSymbols resta esportata da
+  autocapture.js e usata dal race-end autocapture (che è l'unica
+  cosa che la usa ora, come originariamente).
+
+----------------------------------------------------------------
+[2.7] — Timer debounce 3s, rimozione badge NEW, layout landing, PiP
+----------------------------------------------------------------
+
+- TIMER: il race timer non si ferma più appena le icone spariscono.
+  Ora c'è un debounce di 3 secondi: se le icone riappaiono entro 3
+  secondi, il timer continua. Si ferma solo se restano sparite per
+  più di 3 secondi. Evita stop flickering dovuti a frame persi o
+  transizioni brevi.
+
+- RIMOSSO BADGE "NEW": rimosso completamente il badge rosso "NEW"
+  e il bordo rosso dal toggle "Autocapture". Torna lo stile
+  identico del toggle "Nintendo screenshot", come era prima.
+
+- LANDING PAGE - LAYOUT: 
+    * Tolto il bordo rosso dalla sezione "New fork's features"
+      (ora usa lo stesso stile grigio delle altre sezioni)
+    * Spostato "About" sulla stessa riga di "Notes", sotto la
+      sezione fork-features, usando un grid `.aside-row` a 2 colonne
+    * Allineamento verticale: i due aside della riga sotto sono
+      stretchati alla stessa altezza (align-items: stretch)
+
+- ALLINEAMENTO LAST CAPTURE: il rettangolo "Last capture" era più
+  corto del rettangolo video a sinistra perché `<main class="row">`
+  aveva `align-items: center` (ereditato da .row). Cambiato in
+  `align-items: stretch` inline, così i due pannelli hanno la
+  stessa altezza e i lati top/bottom sono allineati.
+
+- DOCUMENT PICTURE-IN-PICTURE (overlay): aggiunto pulsante "📺 PiP"
+  in alto a destra nella pagina overlay. Cliccandolo (Chrome 116+
+  desktop), apre la pagina in una finestra PiP separata che
+  rimane sempre sopra le altre app, ANCHE quando il browser
+  principale è minimizzato o in background. Risolve il problema
+  degli update che non arrivavano quando la pagina principale era
+  inattiva: la finestra PiP continua a ricevere i messaggi
+  BroadcastChannel e si aggiorna in tempo reale. Sincronizzazione
+  via MutationObserver + storage event + BroadcastChannel.
+  Pulsante nascosto automaticamente su browser non compatibili
+  (Firefox, Safari).
+
+- PROMPT OBS: aggiunte istruzioni per il PiP nel prompt del tasto
+  "OBS scores overlay":
+    "--- Picture-in-Picture (Chrome 116+ only) ---
+     Click the 'PiP' button in the overlay page to keep it always
+     on top, even when the main browser window is minimized."
+
+----------------------------------------------------------------
+[2.6] — Bug fix + nuove funzioni (race timer, reset names, etc.)
+----------------------------------------------------------------
+
+- BUG FIX PARITÀ PUNTI: quando due o più team hanno lo stesso
+  punteggio totale, ora mostrano entrambi la stessa icona della
+  posizione più alta (es. 3° e 4° a 80 punti → entrambi rank-3.png).
+  Aggiunto anche un guard check per evitare race condition quando
+  il re-render sostituisce l'emoji.
+
+- BUG FIX AUTOFILL - NO IGN DUPLICATI: riscritta la logica
+  dell'autofill per impedire che due Lounge name ricevano lo
+  stesso in-game name. Aggiunto un set `usedOCRTexts` (case-
+  insensitive) che traccia tutti gli OCR text già assegnati.
+  Applicato a tutti i livelli (L1, L2, L3 e FFA). Se l'OCR
+  riconosce "Marcosky" due volte, la seconda viene ignorata
+  (log in console: "[autofill] FFA/L1/L2/L3 skip: già assegnato").
+
+- TASTO "RESET NAMES" IN EDIT ROSTER: nuovo pulsante a sinistra
+  di "Auto-fill". Cliccandolo (dopo conferma):
+    1. Svuota tutti gli input IGN nel form
+    2. Svuota la cache OCR del mogi (così l'autofill riparte
+       da zero, senza nomi "usati" nella dropdown)
+    3. Aggiorna le dropdown (ora vuote)
+  Utile per ripartire da zero con l'autofill dopo aver pasticciato.
+
+- RACE TIMER: aggiunto timer a destra della scritta "Scoreboard".
+  Usa lo stesso riconoscimento del race-end autocapture (icone
+  moneta/lap). Funzionamento:
+    * Iconde APPARSE → timer parte da 0 (classe is-running, verde)
+    * Iconde SPARITE → timer si ferma (classe is-stopped, rosso)
+    * Iconde RIAPPARSE → reset a 0 e riparte
+  Update del display ogni 100ms; polling icone ogni 200ms.
+
+- OBS OVERLAY - TESTO ISTRUZIONI: il prompt del tasto "OBS scores
+  overlay" ora include anche le istruzioni per OBS:
+    "Add this page that will pop up as 'Window capture' source.
+     Resize the browser window that opens to your liking.
+     Use 'Alt + Left-Click-and-Drag' in OBS to crop out the top
+     part of the browser window or however else you prefer to
+     adjust it."
+
+- OBS OVERLAY - UPDATE SENZA FINESTRA ATTIVA: aggiunto
+  BroadcastChannel in mogi.js + obs-overlay.js. Quando lo stato
+  del Mogi cambia, oltre a salvare in localStorage invia anche
+  un messaggio sul canale 'mkw-obs-overlay'. L'overlay riceve
+  il messaggio e si aggiorna immediatamente, anche se la pagina
+  principale è in background. Polling di fallback ridotto da
+  1s a 500ms per maggiore reattività.
+
+- RIMOZIONE "CONNECT OVERLAY": rimosso completamente il toggle
+  "Connect overlay" dalla UI (era diventato obsoleto con il nuovo
+  OBS overlay). Rimossi:
+    * <label> con checkbox in index.html
+    * import e chiamata setupOverlay in main.js
+    * file src/ui/overlay-toggle.js (eliminato)
+  L'obs-companion (cartella obs-companion/) resta intatto per
+  eventuali altri usi, ma non è più referenziato dalla UI.
+
+- BADGE "NEW" PER AUTOCAPTURE: il toggle "Autocapture" ora ha
+  un badge rosso "NEW" animato (pulse) e un bordo rosso attorno
+  al label, per renderlo più visibile rispetto a "Nintendo
+  screenshot". Indica che è una nuova funzione.
+
+- ROSTER SETUP SEMPLIFICATO: la funzione Roster.parse ora accetta
+  anche un formato semplice con solo righe "N. Name1, Name2"
+  senza Room, MMR o Tier. Se la prima riga inizia con "N. ",
+  viene usato la modalità semplice con tier="?". Se invece c'è
+  "Tier X" come prima riga, usa il formato completo (MMR diventa
+  opzionale). Aggiornato anche il placeholder del dialog con
+  esempi di entrambi i formati.
+
+- "NEW FORK'S FEATURES" IN LANDING: aggiunta una nuova sezione
+  in rosso (con bordo e glow) nella home page che elenca tutte
+  le funzioni uniche della fork:
+    * Autocapture (race end)
+    * No capture card mode
+    * OBS scores overlay
+    * Team rank icons
+    * Gap + Position columns
+    * Smart autofill
+    * Auto re-analyze
+    * Race timer
+    * IT/ES translations
+    * Streamlined roster setup
+
+- TRADUZIONI: tutte le nuove stringhe tradotte in 6 lingue:
+    editRoster.resetNames / confirmResetNames / namesReset
+    landingPage.forkFeaturesLabel + landingPage.forkFeatures[0..9]
+
+----------------------------------------------------------------
+[2.5] — OBS overlay: niente gap, no footer, scelta orientamento
+----------------------------------------------------------------
+
+- OVERLAY: rimosso spazio tra i rettangoli dei team (gap: 0, padding: 0).
+  I rettangoli sono ora attaccati l'uno all'altro, perfetti per OBS
+  dove si ritaglia la zona desiderata.
+
+- OVERLAY: rimossa la scritta "MKW OBS Scores Overlay · Fork by Bholt"
+  in basso a destra (era d'intralcio per OBS).
+
+- OVERLAY: aggiunta scelta orientamento PRIMA di aprire la pagina.
+  Al click su "📺 OBS scores overlay" appare un prompt:
+    1) Normal (3x2 grid for 2v2, 2x2 for 3v3, etc.)
+    2) Horizontal (all teams in one row)
+    3) Vertical (all teams in one column)
+  L'utente digita 1, 2 o 3. L'URL viene aperto con ?orient=normal
+  / horizontal / vertical. In OBS si può ritagliare la parte utile.
+
+- OVERLAY: border-radius dei team-box = 0 (prima 14px) per aderire
+  meglio agli altri rettangoli.
+
+----------------------------------------------------------------
+[2.4] — Snapshot + OBS overlay + rematch race dopo edit roster
+----------------------------------------------------------------
+
+- RIAGGIUNTO TASTO SNAPSHOT: il pulsante "🖼️ Snapshot" è stato
+  ripristinato in fondo alla scoreboard (era stato rimosso nella
+  v1.4). Cliccando copia un'immagine PNG della scoreboard negli
+  appunti, pronta da incollare in Discord/chat.
+
+- NUOVO TASTO "📺 OBS scores overlay": apre una pagina separata
+  (obs-overlay.html) con background TRASPARENTE che mostra solo i
+  punteggi totali dei team:
+    * 2v2 → 6 rettangoli (3x2)
+    * 3v3 → 4 rettangoli (2x2)
+    * 4v4 → 3 rettangoli (3x1)
+    * 6v6 → 2 rettangoli (1x2)
+    * FFA → top 6 player (3x2)
+  Ogni rettangolo mostra: tag del team + punteggio totale + posizione
+  in classifica. Il 1° classificato ha bordo oro con glow.
+  Per usarlo in OBS:
+    1. Bot → "📺 OBS scores overlay" (apre la pagina in nuova tab)
+    2. OBS → aggiungi "Browser Source"
+    3. URL: http://localhost:8000/obs-overlay.html
+    4. Spunta "Use OBS Browser as transparency source" per sfondo
+       trasparente
+  Sincronizzazione in tempo reale tramite localStorage (evento
+  'storage' cross-tab). Niente bridge esterno da installare.
+
+- REMATCH RACE DOPO EDIT ROSTER: quando l'utente salva modifiche nel
+  roster (cambiato IGN, corretto tag, aggiunti nomi mancanti), tutte
+  le race salvate vengono rianalizzate automaticamente con il nuovo
+  roster. La POSIZIONE (placement) di ogni player viene preservata,
+  ma viene ricalcolato l'abbinamento playerId/resolvedName usando
+  l'ocrText già salvato + il nuovo roster + Levenshtein pesato.
+  Così se prima alcune race avevano nomi non abbinati o abbinati al
+  player sbagliato (perché il roster era incompleto/sbagliato),
+  dopo la correzione del roster i punteggi si aggiornano di
+  conseguenza. ~10ms per race, niente re-OCR.
+
+- TRADUZIONI: nuove chiavi tradotte in 6 lingue:
+    scoreboard.obsOverlayButton
+    editRoster.racesRematched
+
+----------------------------------------------------------------
+[2.3] — Modalità "No capture card" (inserimento manuale posizioni)
+----------------------------------------------------------------
+
+- NUOVA PAGINA: aggiunta una modalità alternativa per chi non ha una
+  capture card. Accessibile dal tasto "🎮 No capture card" nella
+  home page, accanto a "Get started".
+
+- PAGINA NO-CAPTURE (no-capture-card.html):
+    * Stessa identica grafica della pagina principale
+    * Header con stessi link Discord + GitHub + language selector
+    * Rimossi: rettangolo capture card, rettangolo "last capture",
+      sezione "race history"
+    * Rimane solo la Scoreboard, identica a quella principale
+      (colonne posizione, team, player, race, total, gap, immagini
+      rank-1..6.png per i team)
+    * Bottone "← Main" in alto a destra per tornare alla pagina
+      principale
+
+- WIZARD "SAVE SCORES":
+    * Sostituisce il pulsante "✏️" nell'ultima riga di ogni colonna
+      race con un pulsante "Save scores"
+    * Al click, apre un dialog che guida l'utente nell'inserimento
+      delle posizioni:
+        - In alto: "Select Nth place player" (con N crescente 1..12)
+        - Sotto: griglia con tutti i player non ancora assegnati
+        - L'utente clicca sul player → viene assegnato a quella
+          posizione
+        - Progress: "5/12 positions assigned"
+        - Per le posizioni 11 e 12: pulsante "⚠ DC (disconnect)"
+          visibile per marcare disconnessioni
+        - Pulsante "↩ Undo" per annullare l'ultima assegnazione
+        - Pulsante "Save" abilitato solo quando tutte le 12
+          posizioni sono assegnate
+    * Se la race esiste già, chiede conferma di sovrascrittura
+    * I punti vengono calcolati con lo stesso algoritmo della
+      modalità principale (POINTS_BY_PLACEMENT = 15,12,10,9,8,7,6,5,
+      4,3,2,1; DC = 1 punto)
+
+- TRADUZIONI: tutte le nuove stringhe tradotte in 6 lingue
+  (en, it, es, fr, de, ja). Le chiavi aggiunte sono:
+    landingPage.noCaptureCardButton
+    noCapturePage.{lead, steps[0..3]}
+    noCapture.{saveScoresButton, wizardTitle, selectPlace,
+               selectPlace1, selectPlace2, selectPlace3,
+               progress, allAssigned, undoButton, dcButton,
+               confirmOverwrite, noMorePlayers, notAllAssigned, dc}
+
+- COMPATIBILITÀ: la modalità no-capture usa lo stesso modulo Mogi,
+  lo stesso modulo Roster, lo stesso export ZIP, lo stesso
+  scoreboard. Le race salvate sono strutturalmente identiche a
+  quelle della modalità principale (stessa classe Race, stesso
+  formato export). Il file no-capture-card.js NON tocca alcun file
+  esistente — è completamente aggiunto.
+
+----------------------------------------------------------------
+[2.2] — Branding: Fork by Bholt + link Discord
+----------------------------------------------------------------
+
+- BRANDING: aggiunta scritta "Fork by Bholt" in alto accanto al
+  titolo "MKW Mogi Manager", in grigio italic.
+
+- LINK DISCORD: aggiunta iconcina Discord (img/discord-logo.svg)
+  ACCANTO alla scritta "Fork by Bholt" (non sostituisce GitHub).
+  Link: https://discordapp.com/users/594798722940928001 (ID numerico
+  di Bholt — link diretto al profilo, apre l'app Discord).
+  Tooltip: "Discord: Bholt". Effetto hover: glow blu + scale.
+
+- GITHUB PRESERVATO: l'icona GitHub in alto a destra è stata
+  ripristinata e continua a linkare il progetto originale
+  (https://github.com/PFQNiet/mkw-lounge-tracker). Crediti
+  all'autore originale Niet mantenuti anche nel footer.
+
+----------------------------------------------------------------
+[2.1] — Tag + Levenshtein combinati + cleanup dropdown
+----------------------------------------------------------------
+
+- L1 TAG + LEVENSHTEIN COMBINATI: riscritta la logica del Livello 1
+  dell'autofill. Prima il L1 assegnava in modo greedy il primo OCR
+  text al primo player libero del team, portando a inversioni
+  (es. "B" assegnato a "Bholt" e "Bholt" assegnato al mate "B").
+  Ora il L1:
+    1. Per ogni team, raccoglie tutti gli OCR text che iniziano col
+       tag del team E tutti i player liberi del team
+    2. Calcola la distanza Levenshtein tra ogni coppia (OCR, player)
+       usando il minimo tra nome Lounge e IGN
+    3. Ordina tutte le coppie per distanza crescente
+    4. Assegna greedy partendo dalla coppia con distanza minore
+  Così "B" (distanza 0 da player "B") va al mate, e "Bholt"
+  (distanza 0 da player "Bholt") va a Bholt. Inversioni risolte.
+
+- DROPDOWN OCR: rimosso il testo "(usato)" dalle option già usate.
+  Ora il nome appare pulito, con solo il colore rosso e lo sbarrato
+  a indicare che è già in uso. Niente più traduzioni da gestire.
+
+- DROPDOWN OCR: il nome attualmente assegnato al player corrente
+  ora appare rosso e disabilitato anch'esso (prima era bianco e
+  selezionabile, creando confusione visiva). Per riassegnare un
+  nome già in uso, l'utente deve prima cancellare il valore
+  dall'input IGN del player sorgente.
+
+----------------------------------------------------------------
+[2.0] — Fix autenticità tag + dropdown OCR con tutti i nomi
+----------------------------------------------------------------
+
+- AUTOFILL TEAM EVENT - ORDINE INVERTITO:
+  Prima il Levenshtein assegnava nomi come "D Trom" al player PedroCV
+  del team "A" (perché fuzzy match) anche se "D" era il tag del team 3.
+  Ora l'ordine è:
+    L1 - Tag (PRIORITA' MASSIMA): se l'OCR inizia col tag di un team X,
+         assegnato al primo player libero del team X.
+    L2 - Levenshtein: solo per i nomi rimasti, e SOLO se l'OCR NON inizia
+         con il tag di un altro team (controllo conflitto).
+    L3 - Iniziali: solo per i nomi rimasti, e SOLO se non c'è conflitto tag.
+    L4 - Manuale: dropdown OCR.
+  Log dettagliato in console: cerca "[autofill] L1/L2/L3/L4".
+
+- DROPDOWN OCR CON TUTTI I NOMI:
+  Prima salvavamo solo i nomi OCR non assegnati (es. 4 su 12). Ora
+  salviamo TUTTI i 12 nomi OCR rilevati. Nella dropdown:
+    - Nomi già usati in un input IGN → sbarrati in rosso, disabilitati
+    - Nomi non ancora usati → selezionabili
+  Così se il livello 2 (Levenshtein) ha sbagliato a assegnare un nome,
+  l'utente può selezionarlo dalla dropdown per riassegnarlo a un altro
+  player (dopo aver cancellato manualmente il valore sbagliato).
+
+----------------------------------------------------------------
+[1.9] — Rimozione unmatched player + dropdown OCR in Edit Roster
+----------------------------------------------------------------
+
+- RIMOZIONE MANUALRESOLVE: rimosso completamente il dialog
+  "unmatched player" che forzava l'utente a selezionare un player
+  per ogni nome non riconosciuto. Ora, se un nome OCR non viene
+  abbinato a nessun player, viene semplicemente lasciato non
+  assegnato (playerId = null, resolvedName = ocrText preservato).
+  La capture va comunque a buon fine anche con placement parziali.
+
+- DROPDOWN OCR IN EDIT ROSTER: aggiunta una nuova colonna "OCR"
+  nell'Edit Roster con una dropdown per ogni player. La dropdown
+  mostra tutti i nomi OCR rilevati dal game (pause screen o race
+  screen) ma non abbinati automaticamente. L'utente può:
+    - Selezionare un nome dalla dropdown per assegnarlo al player
+    - I nomi già usati da altri player sono sbarrati in rosso e
+      disabilitati (non selezionabili)
+    - La dropdown si aggiorna automaticamente quando l'utente
+      modifica un campo IGN a mano o seleziona un nome
+
+- CACHE NOMI OCR NON ASSEGNATI: aggiunta in mogi.js una cache
+  #unassignedOCRNames che persiste per tutta la sessione. Ogni
+  capture (pause o race) aggiunge i nomi OCR non abbinati a questa
+  cache. L'Edit Roster legge la cache per popolare le dropdown.
+
+- FRAMES VERIFICA: confermati a 1 (gia' fatto in v1.8, ma l'utente
+  non aveva ancora estratto l'ultimo zip).
+
+----------------------------------------------------------------
+[1.8] — Frames 2→1 + matching per iniziali
+----------------------------------------------------------------
+
+- AUTOCAPTURE RACE-END: ridotti racingConfirmHits e goneConfirmHits
+  da 2 a 1. Appena un frame non combacia con il reference PNG,
+  parte subito il countdown di 2,3 secondi. Massima reattivita'.
+
+- OCR MATCHING PER INIZIALI: aggiunto un livello extra di matching
+  in src/ocr.js, prima del manualResolve. Quando il Levenshtein
+  non riesce ad assegnare tutti i player, per ogni riga OCR non
+  assegnata il bot cerca un player non assegnato il cui nome
+  Lounge o IGN inizia con le stesse 3 lettere (case-insensitive).
+  Se il match e' univoco → assegna automaticamente.
+  Se e' ambiguo (piu' candidati) → lascia al manualResolve.
+  Log in console: cerca "[ocr] Matching per iniziali:".
+
+----------------------------------------------------------------
+[1.7] — Fix allineamento edit roster
+----------------------------------------------------------------
+
+- FIX EDIT ROSTER: nella v1.5, quando ho rimosso la select delle
+  emoji/colore del team, ho anche cambiato gridTemplateColumns da
+  '1fr 1fr 160px' (3 colonne) a '1fr 1fr' (2 colonne). Ma le
+  funzioni createHeaderRow e createPlayerRow creano ancora 3
+  elementi ciascuno (Lounge name / In-game name / Substitute),
+  quindi andavano a capo a meta' riga causando il disallineamento
+  visivo (colonne sfasate, "Edit" button mal posizionati).
+  Fix: ripristinate le 3 colonne; la riga team ora ha uno spacer
+  vuoto come terzo elemento per mantenere l'allineamento.
+
+----------------------------------------------------------------
+[1.6] — Autofill 3-livelli + logging diagnostico gallery
+----------------------------------------------------------------
+
+- AUTOFILL TEAM EVENT: nuova logica a 3 livelli:
+    Livello 1 - Somiglianza nome: il sistema OCR ha già fatto il
+                matching fuzzy (Levenshtein pesato). Se p.playerId
+                è settato, assegnamo direttamente l'IGN letto dal
+                game a quel player.
+    Livello 2 - Somiglianza tag: se p.playerId è null (nessun match
+                per nome), proviamo a matchare l'inizio dell'OCR text
+                con il tag di uno dei team. Se matcha, assegnamo al
+                primo player libero di quel team (gestione tag più
+                lunghi in caso di conflitto "AB" vs "ABC").
+    Livello 3 - Manuale: se neanche il tag matcha, lasciamo il campo
+                vuoto per compilazione manuale.
+  Log dettagliato in console (F12): cerca "[autofill] Livello N".
+
+- LOGGING DIAGNOSTICO GALLERY: aggiunti console.log in main.js e
+  gallery.js per diagnosticare un bug dove la sezione "Race history"
+  appariva vuota. Ogni funzione setupX ora logga "[main] XXX OK" o
+  "[main] XXX FAIL" + errore. La gallery logga quando riceve
+  l'evento update e quanti thumbnail crea. L'utente può copiare
+  i log dalla console (F12) e mandarceli per diagnosticare.
+
+----------------------------------------------------------------
+[1.5] — Bugfix gap, rimozione select emoji, fix race history
+----------------------------------------------------------------
+
+- GAP FFA: invertita la logica. Ora ogni player mostra il proprio
+  vantaggio sul player SOTTO di lui (non più il distacco da
+  quello sopra). Es. il 1° classificato mostra quanti punti ha
+  in più rispetto al 2°, il 2° rispetto al 3°, ecc. L'ultimo
+  classificato mostra "—".
+
+- EDIT ROSTER: rimossa la <select> per cambiare il colore/emoji
+  del team. Le icone ora sono immagini PNG assegnate
+  automaticamente in base alla posizione in classifica, quindi
+  non serve più cambiarle a mano. Nel dialog resta solo il
+  campo Tag modificabile.
+
+- FIX RACE HISTORY: la gallery degli screenshot in fondo alla
+  pagina era sparita perché la rimozione del tasto "Snapshot"
+  (v1.4) aveva lasciato una chiamata a connectScoreboardScreenshotter
+  in main.js che passava null come bottone, facendo crashare
+  tutto main.js con un TypeError. Rimossa la chiamata, ora la
+  gallery torna a funzionare.
+
+----------------------------------------------------------------
+[1.4] — Aggiornamento UX/UI + nuove funzioni
+----------------------------------------------------------------
+
+- AUTOCAPTURE RACE-END: ridotto goneConfirmHits da 3 a 2.
+  Appena 2 frame consecutivi non combaciano con il reference PNG,
+  parte il countdown di 2,3 secondi. Screenshot più tempestivo,
+  niente più scoreboard già mezza andata.
+
+- SCOREBOARD FFA: aggiunta colonna "Gap" a destra del totale che
+  mostra il distacco punti dal giocatore precedente in classifica
+  (es. +15, +3, =, —). Colorata: verde se in vantaggio, rossa se
+  in svantaggio, grigia se pari.
+
+- SCOREBOARD: aggiunta colonna posizione "#" in classifica per
+  ogni player. Nei team event è tra la colonna Team e Player; nei
+  FFA è tutta a sinistra prima di Player. Colorata in oro/argento/
+  bronzo per le prime 3 posizioni.
+
+- AUTOFILL TEAM EVENT: ora, nei team event, l'autofill assegna
+  solo i nomi in gioco (IGN) che iniziano con il tag del team
+  corrispondente. Nomi che non matchano il tag vengono ignorati
+  e loggati in console. Evita assegnazioni cross-team sbagliate.
+  FFA: comportamento invariato (qualsiasi nome viene assegnato).
+
+- UI: rinominati i toggle:
+    "Auto-capture"          → "Nintendo screenshot"
+    "Auto-capture (race end)" → "Autocapture"
+
+- UI: rimosso il tasto "🖼️ Snapshot" in fondo alla scoreboard
+  (funzione deprecata — uso non chiaro).
+
+- UI/ESTETICA: restyle generale:
+    * Sfondo con gradient animato (3 blob colorati che si muovono
+      lentamente, 24s per ciclo).
+    * Bordi di tutti i panel, bottoni e select più accesi
+      (#333 → #444 base, hover con glow azzurro).
+    * Effetto glow sottile animato sui panel (loop 6s).
+    * Toggle checkbox ridisegnati come switch animati (pill
+      azzurra quando attivi).
+    * Bordo animato nell'header (linea che scorre).
+    * Video preview con glow blu intorno.
+    * Toast con backdrop blur.
+
+- TEAM ICONS: aggiunto supporto per immagini personalizzate PNG
+  che sostituiscono le emoji dei team nella scoreboard. Le
+  immagini sono già incluse in img/team-icons/ con i nomi
+  rank-1.png ... rank-6.png (32×32 px, sfondo trasparente).
+  L'immagine assegnata dipende SOLO dalla posizione del team in
+  classifica (1° = rank-1.png, 2° = rank-2.png, ecc.), non dal
+  colore del team. Sostituiscono le 6 emoji originali (🍄🐢🦍🌌💰🦖).
+  Se una immagine manca, fallback all'emoji. Per sostituirle,
+  basta sovrascrivere i file PNG in img/team-icons/.
+
+- TRADUZIONI: aggiunte lingue Italiano (it) e Spagnolo (es),
+  selezionabili dal menu in alto a destra. Traduzioni complete
+  di tutte le stringhe visibili.
+
+- AVVIO: aggiunto file start.bat (Windows) per avviare il
+  server locale con un doppio click, senza aprire il cmd a mano.
+
+----------------------------------------------------------------
+[1.3] — Sistema autocapture race-end con retry loop
+----------------------------------------------------------------
+
+- AUTOCAPTURE RACE-END: riscritta la state machine con nuovo
+  stato CAPTURING + loop di retry. Quando i simboli spariscono:
+    IDLE → RACING → WAITING (2,3s) → CAPTURING (retry ogni 500ms,
+    max 30 tentativi) → COOLDOWN (5s) → IDLE.
+  Il bot prova a catturare la scoreboard più volte finché non va
+  a buon fine una, invece di arrendersi al primo tentativo.
+
+- REFERENCE PNG: il sistema ora confronta il frame del video con
+  un PNG di riferimento (img/race-end-reference.png) fornito
+  dall'utente. Confronto pixel-by-pixel sui soli pixel non-
+  trasparenti del PNG. Tolleranza RGB 80, match ratio 75%.
+  Niente più bitmask generati da script Python.
+
+----------------------------------------------------------------
+[1.2] — Server locale + packaging
+----------------------------------------------------------------
+
+- Aggiunto server.js: server HTTP statico che usa solo moduli
+  nativi di Node (nessun npm install richiesto).
+
+- Aggiunto package.json con script di avvio (npm start, node
+  server.js).
+
+- Aggiunto README.md con istruzioni complete in italiano.
+
+----------------------------------------------------------------
+[1.1] — Prima implementazione race-end
+----------------------------------------------------------------
+
+- Aggiunta funzione setupAutoCaptureRaceEnd in
+  src/ui/autocapture-toggle.js: state machine IDLE → RACING →
+  WAITING → CAPTURE → COOLDOWN.
+
+- Aggiunta funzione checkCoinIcon e checkLapIcon in
+  src/autocapture.js: rilevamento simboli via bitmask.
+
+- Aggiunto toggle "Auto-capture (race end)" in index.html.
+
+- Aggiunte stringhe i18n per race-end in en.js.
+
+----------------------------------------------------------------
+[1.0] — Versione base (dal progetto originale PFQNiet)
+----------------------------------------------------------------
+
+- Cattura frame da webcam virtuale (OBS).
+- OCR dei nomi e dei punteggi con Tesseract.js.
+- Fuzzy matching con roster (Levenshtein pesato).
+- Risoluzione manuale dei conflitti.
+- Scoreboard con punteggi cumulativi per 12 gare.
+- Export per Lounge Discord + ZIP completo.
+- Supporto FFA, 2v2, 3v3, 4v4, 6v6.
+- Lingue: English, Français, Deutsch, 日本語.
+- Auto-capture originale (rileva icona Home della cattura Switch).
+
+================================================================
