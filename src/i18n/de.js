@@ -54,10 +54,10 @@ export default {
                         ],
                         aboutLabel: "Über",
                         about: [
-                                "Erstellt von Bholt",
+                                "Erstellt von [Bholt](https://github.com/Bh0lt22)",
                                 "Erstellt von [Niet](https://github.com/PFQNiet) ; Mitwirkende: TechyAlex",
-                                "[Quellcode auf GitHub ansehen](https://github.com/PFQNiet/mkw-lounge-tracker)",
-                                "[Bug melden](https://github.com/PFQNiet/mkw-lounge-tracker/issues)"
+                                "[Quellcode auf GitHub ansehen](https://github.com/Bh0lt22/mkw-automatic-lounge-tracker)",
+                                "[Bug melden](https://github.com/Bh0lt22/mkw-automatic-lounge-tracker/issues)"
                         ]
                 },
 

@@ -54,10 +54,10 @@ export default {
                         ],
                         aboutLabel: "Info",
                         about: [
-                                "Creato da Bholt",
+                                "Creato da [Bholt](https://github.com/Bh0lt22)",
                                 "Creato da [Niet](https://github.com/PFQNiet); contributor: TechyAlex",
-                                "[Codice sorgente su GitHub](https://github.com/PFQNiet/mkw-lounge-tracker)",
-                                "[Segnala un bug](https://github.com/PFQNiet/mkw-lounge-tracker/issues)"
+                                "[Codice sorgente su GitHub](https://github.com/Bh0lt22/mkw-automatic-lounge-tracker)",
+                                "[Segnala un bug](https://github.com/Bh0lt22/mkw-automatic-lounge-tracker/issues)"
                         ]
                 },
 

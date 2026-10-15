@@ -53,10 +53,10 @@ export default {
                         ],
                         aboutLabel: "About",
                         about: [
-                                "Made by Bholt",
+                                "Made by [Bholt](https://github.com/Bh0lt22)",
                                 "Made by [Niet](https://github.com/PFQNiet); Contributors: TechyAlex",
-                                "[View source on GitHub](https://github.com/PFQNiet/mkw-lounge-tracker)",
-                                "[Report a bug](https://github.com/PFQNiet/mkw-lounge-tracker/issues)"
+                                "[View source on GitHub](https://github.com/Bh0lt22/mkw-automatic-lounge-tracker)",
+                                "[Report a bug](https://github.com/Bh0lt22/mkw-automatic-lounge-tracker/issues)"
                         ]
                 },
                 rosterSetup: {
